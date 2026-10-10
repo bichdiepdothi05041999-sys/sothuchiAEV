@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sổ thu chi tiền mặt · 현금 출납부</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;600&display=swap">
+<style>
+:root{--bg:#f6f3ec;--card:#fffdf8;--ink:#2b2f3a;--mute:#4a5160;--line:#d9d4c7;--acc:#2f5d62;--accfg:#fff;--in:#1f6f4a;--out:#a63d2f;--panel:#ebe6d8;--input:#fff;--sum:#e4efe9;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171a1c;--card:#1f2326;--ink:#e8e6df;--mute:#a9b0b5;--line:#363c40;--acc:#7fb3b8;--accfg:#10201f;--in:#6fcf9f;--out:#f09a8c;--panel:#262b2e;--input:#15181a;--sum:#22302a}}
+:root[data-theme="dark"]{--bg:#171a1c;--card:#1f2326;--ink:#e8e6df;--mute:#a9b0b5;--line:#363c40;--acc:#7fb3b8;--accfg:#10201f;--in:#6fcf9f;--out:#f09a8c;--panel:#262b2e;--input:#15181a;--sum:#22302a}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'STIX Two Text','Noto Serif KR',serif;font-size:17px;line-height:1.45}
+.wrap{max-width:1680px;margin:0 auto;padding:28px 20px 56px}
+h1{margin:0 0 4px;font-size:34px;text-align:center;color:var(--acc)}
+.sub{text-align:center;color:var(--mute);font-size:15px;margin:0 0 16px}
+.bar{display:flex;gap:8px;justify-content:flex-end;margin-bottom:16px}
+button,input,select{font:inherit;font-size:16px;color:var(--ink)}
+button{min-height:44px;padding:0 16px;border-radius:10px;border:1px solid var(--acc);background:var(--card);color:var(--acc);font-weight:600;cursor:pointer}
+button.pri{background:var(--acc);color:var(--accfg)}
+.bt{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.2;padding:6px 18px}
+.bt{text-align:center}.bt.pm{flex-direction:row;gap:10px}
+@media(min-width:900px) and (min-height:720px){.ent{position:sticky;top:8px;z-index:5;box-shadow:0 6px 18px rgba(0,0,0,.12)}}
+#cnt,#tbl .r{scroll-margin-top:260px}.r.new{animation:fl 1.6s ease-out}@keyframes fl{from{background:var(--sum)}to{background:transparent}}.menu{position:relative}.mlist{position:absolute;right:0;top:calc(100% + 6px);min-width:210px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px;box-shadow:0 8px 24px rgba(0,0,0,.2);z-index:20}.mlist button{display:block;width:100%;text-align:left;border:0;background:transparent;color:var(--ink);padding:8px 12px;border-radius:8px;font-weight:500}.mlist button:hover,.mlist button:focus{background:var(--panel);outline:2px solid var(--acc)}#vdlg{width:min(1280px,96vw)}.vi{display:block}.ko{display:block;font-size:.78em;font-weight:400;opacity:.8;line-height:1.25}label .ko{font-size:12.5px}details{background:var(--panel);border-radius:14px;padding:0 16px;margin-bottom:16px}summary{min-height:48px;display:flex;align-items:center;cursor:pointer;font-weight:600;color:var(--acc)}.cm{padding-bottom:16px}
+input,select{width:100%;min-height:44px;padding:8px 10px;background:var(--input);border:1px solid var(--line);border-radius:10px}
+label{display:block;font-size:14px;color:var(--mute);margin-bottom:4px}
+.top{max-width:320px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:16px}
+.form{background:var(--panel);border-radius:16px;padding:16px;margin-bottom:16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;align-items:end}
+.w2{grid-column:span 2}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.chip{display:inline-flex;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:2px 4px 2px 14px;font-size:15px}
+.chip button{border:0;background:transparent;color:var(--out);min-height:36px;min-width:36px;padding:0;font-size:18px}
+h2{font-size:19px;color:var(--acc);margin:22px 0 8px}
+.box{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:14px}
+.box .r:last-child{border-bottom:0}
+.wf{grid-column:1/-1}[hidden]{display:none!important}
+.kp{display:flex;flex-wrap:wrap;gap:12px;margin:8px 0 12px}.kp>div{flex:1 1 220px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 16px}.kp b{display:block;font-size:20px;margin-top:2px}
+.form input,.form select{font-size:15px;padding:8px}
+@media(min-width:900px){.ent{grid-template-columns:repeat(7,minmax(0,1fr))}.ent .w2{grid-column:span 2}.ent #add{grid-column:span 2;align-self:end}.flt .w2{grid-column:auto}.flt{grid-template-columns:100px minmax(130px,.8fr) 160px 160px minmax(150px,1fr) minmax(220px,1.3fr) auto}}
+label,h1,h2,summary,.bt,.kp>div,.r.h,.r.s,.r.o{text-transform:uppercase}.kp b{text-transform:none}.kin{display:none!important}.kin{margin-top:4px;min-height:36px;color:var(--mute)}.ent{align-items:start}.dp{position:relative}.dp input:first-child{padding-right:42px}.sq input:first-child{padding-left:42px;padding-right:10px}.cal{position:absolute;right:3px;top:3px;bottom:3px;min-height:0;width:36px;padding:0;border:0;background:transparent;display:flex;align-items:center;justify-content:center}.dpick{position:absolute;left:0;right:0;bottom:0;height:1px;min-height:0;padding:0;border:0;opacity:0;pointer-events:none}
+.r>span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.r>span:nth-child(4),.r>span:nth-child(5){white-space:normal;overflow-wrap:anywhere}
+dialog{width:min(860px,94vw);max-height:88vh;border:1px solid var(--line);border-radius:18px;background:var(--bg);color:var(--ink);padding:20px 22px}dialog::backdrop{background:rgba(0,0,0,.45)}
+.dg{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.dg .wf2{grid-column:1/-1}
+.r.pr{grid-template-columns:minmax(160px,1fr) minmax(160px,1fr) 70px 150px 150px 44px;min-width:820px}
+.r{font-size:14.5px;display:grid;grid-template-columns:44px 98px 90px minmax(170px,1fr) 150px 200px 105px 120px 140px 118px 118px 128px 40px;gap:8px;align-items:center;padding:8px 12px;border-bottom:1px solid var(--line);min-width:1650px}
+.r.c4{grid-template-columns:minmax(200px,1fr) 150px 150px 150px;min-width:680px}
+.r.h{background:var(--acc);color:var(--accfg);font-weight:600}
+.r.h .in,.r.h .out{color:inherit}
+.r.o{font-weight:600}
+.r.s{background:var(--sum);font-weight:700;border-bottom:0}
+.n{text-align:right;font-variant-numeric:tabular-nums}
+.in{color:var(--in)}.out{color:var(--out)}
+.x button{border:0;background:transparent;color:var(--out);font-size:20px;padding:0;min-width:44px}
+.note{border-radius:12px;margin-top:20px;padding:14px 18px;background:var(--card);border-left:4px solid var(--acc);font-size:16px}
+.cnt{font-size:14px;color:var(--mute);margin:0 0 8px}
+#pv{display:none}
+.sig{display:flex;justify-content:space-around;margin-top:48px;text-align:center}
+.sig div{min-width:180px;height:110px}
+</style><style id="pcss" media="print">:root{--bg:#fff;--card:#fff;--ink:#222;--mute:#444;--line:#bbb;--acc:#2f5d62;--accfg:#fff;--in:#1f6f4a;--out:#a63d2f;--sum:#eef3f0;--input:#fff}
+.np,.x,#scr{display:none!important}#pv{display:block}
+.wrap{max-width:none;padding:5mm 6mm}.r{min-width:0;font-size:var(--pf,12.5px);padding:6px 8px;gap:6px;break-inside:avoid}#pv .r:not(.c4){grid-template-columns:var(--cols,26px 68px 70px 1fr 86px 104px 60px 62px 74px 76px 76px 82px)}#pv.hc1 .r:not(.c4)>span:nth-child(1){display:none}#pv.hc2 .r:not(.c4)>span:nth-child(2){display:none}#pv.hc3 .r:not(.c4)>span:nth-child(3){display:none}#pv.hc4 .r:not(.c4)>span:nth-child(4){display:none}#pv.hc5 .r:not(.c4)>span:nth-child(5){display:none}#pv.hc6 .r:not(.c4)>span:nth-child(6){display:none}#pv.hc7 .r:not(.c4)>span:nth-child(7){display:none}#pv.hc8 .r:not(.c4)>span:nth-child(8){display:none}#pv.hc9 .r:not(.c4)>span:nth-child(9){display:none}#pv.hc10 .r:not(.c4)>span:nth-child(10){display:none}#pv.hc11 .r:not(.c4)>span:nth-child(11){display:none}#pv.hc12 .r:not(.c4)>span:nth-child(12){display:none}h1{font-size:28px}.sig{margin-top:28px}.sig div{height:90px}
+.r.c4{grid-template-columns:var(--c4,1fr 130px 130px 130px)}
+.ko{font-size:.85em}.r>span{white-space:normal;overflow:visible}input{border:0;padding:0;min-height:0}@page{size:A4 landscape;margin:0}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+</head>
+<body>
+<div class="wrap">
+ <div class="bar np"><label for="mod" style="align-self:center;margin:0 4px 0 0"><span class="vi">PHÂN HỆ</span><span class="ko">모듈</span></label><select id="mod" style="width:auto;min-width:0;min-height:38px;padding:4px 8px;font-size:14px;font-weight:700;color:var(--acc);border:1.5px solid var(--acc)"></select><span id="cstat" style="margin-right:auto;margin-left:12px;align-self:center;font-size:14px"></span><button class="bt" id="logout"><span class="vi">ĐĂNG XUẤT</span><span class="ko">로그아웃</span></button><button class="bt" id="setBtn"></button><button class="bt" id="cur"></button><button class="bt" id="clear"></button></div>
+ <h1 id="title"></h1><div id="co" style="text-align:center;margin-bottom:12px;color:var(--mute);font-size:15px"></div>
+ <div id="imp" class="np" hidden style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;border:1.5px dashed var(--acc);border-radius:12px;padding:8px 14px;margin-bottom:12px;cursor:pointer;background:var(--card);font-size:14px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="color:var(--acc)"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></svg><b style="color:var(--acc)">Thả file sao kê · 거래내역 업로드</b><span style="color:var(--mute)">Excel / PDF</span><span id="impMsg" style="margin-left:auto;color:var(--mute)"></span><input type="file" id="impFile" accept=".xlsx,.xls,.csv,.pdf" multiple hidden></div>
+ <div class="top" id="topOpen">
+  <div class="np"><label id="lOpen"></label><input id="open" inputmode="numeric" class="n"></div>
+ </div>
+
+ <div class="form np ent">
+  <div><label id="lDate"></label><div class="dp"><input id="fDate" inputmode="numeric" maxlength="10" placeholder="dd/mm/yyyy"><button type="button" class="cal" data-f="fDate" aria-label="Calendar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></svg></button><input type="date" class="dpick" id="fDateP" tabindex="-1" aria-hidden="true"></div></div>
+  <div><label id="lPo"></label><input id="fPo"></div>
+  <div class="w2"><label id="lDesc"></label><input id="fDesc"><input id="fDescKo" class="kin" placeholder="한국어 자동 번역 · Tự dịch sang tiếng Hàn"></div>
+  <div><label id="lWho"></label><input id="fWho" list="whoList"><datalist id="whoList"></datalist><input id="fWhoKo" class="kin" placeholder="한국어 자동 번역 · Tự dịch sang tiếng Hàn"></div>
+  <div class="w2"><label id="lCat"></label><div style="display:flex;gap:6px"><select id="fCat" style="flex:1;min-width:0"></select><button id="catPlus" aria-label="+" style="min-width:44px;padding:0;font-size:22px">+</button></div></div>
+  <div><label id="lValid"></label><select id="fValid"><option value=""></option><option value="ok"></option><option value="no"></option></select></div>
+  <div><label id="lAcc"></label><select id="fAcc"><option value=""></option><option value="ok"></option><option value="no"></option></select></div>
+  <div><label id="lInv"></label><input id="fInv" list="invList"><datalist id="invList"><option value="Không có hóa đơn"></datalist></div>
+  <div><label id="lType"></label><select id="fType"><option value="in"></option><option value="out"></option></select></div>
+  <div><label id="lAmt"></label><input id="fAmt" inputmode="numeric" class="n"></div>
+  <button class="pri" id="add"></button>
+  <div class="wf" id="catPanel" hidden><div class="chips" id="chips"></div><div style="display:flex;flex-wrap:wrap;gap:8px"><input id="newVi" placeholder="Tiếng Việt" style="flex:1 1 180px"><input id="newKo" placeholder="한국어" style="flex:1 1 140px"><button class="pri" id="addCat"></button></div></div>
+ </div>
+
+ 
+ <div class="form np flt">
+  <div><label id="lYear"></label><select id="pYear"></select></div>
+  <div><label id="lMon"></label><select id="pMon"></select></div>
+  <div><label id="lFrom"></label><div class="dp"><input id="pFrom" inputmode="numeric" maxlength="10" placeholder="dd/mm/yyyy"><button type="button" class="cal" data-f="pFrom" aria-label="Calendar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></svg></button><input type="date" class="dpick" id="pFromP" tabindex="-1" aria-hidden="true"></div></div>
+  <div><label id="lTo"></label><div class="dp"><input id="pTo" inputmode="numeric" maxlength="10" placeholder="dd/mm/yyyy"><button type="button" class="cal" data-f="pTo" aria-label="Calendar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></svg></button><input type="date" class="dpick" id="pToP" tabindex="-1" aria-hidden="true"></div></div>
+  <div class="w2"><label id="lMode"></label><select id="pMode"><option value="detail"></option><option value="day"></option><option value="in"></option><option value="out"></option><option value="sum"></option></select></div>
+  <div><label id="lQ"></label><div class="dp sq"><input id="pQ" list="qList" placeholder="Nội dung, đối tượng, PO · 내용, 대상, PO"><button type="button" class="cal" id="viewBtn" aria-label="Tìm kiếm · 검색" style="left:3px;right:auto"></button><datalist id="qList"></datalist></div></div>
+  <div style="display:flex;gap:8px">
+   <div class="menu"><button class="pri bt pm" id="prBtn"></button>
+    <div class="mlist" id="prList" hidden><button id="miPrint" data-a="print"></button><button id="miPdf" data-a="pdf"></button><button id="miXlsx" data-a="xlsx"></button></div></div></div>
+ </div>
+
+ <div id="scr">
+  <div class="cnt" id="cnt"></div>
+  <div class="box"><div id="tbl"></div></div>
+  <details id="sumBox"><summary><span id="sumTitle"></span></summary><div id="cat"></div></details>
+  <div class="note" id="formula"></div>
+  <div class="cnt np" style="margin-top:10px">⌨ Enter: sang ô tiếp / thêm giao dịch · Ctrl+Enter: thêm ngay · Ctrl+S: lưu · Ctrl+Z: hoàn tác · Ctrl+Y: làm lại · Enter ở cột Đối tượng / phân loại: xuống dòng dưới<br>Enter: 다음 칸 / 거래 추가 · Ctrl+S: 저장 · Ctrl+Z: 실행 취소 · Ctrl+Y: 다시 실행</div>
+ </div>
+ <div id="pv"></div>
+ <div class="sig"><div id="sMaker"></div><div id="sApp"></div></div>
+</div>
+<div id="login" hidden style="position:fixed;inset:0;z-index:10000;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:16px"><form id="lform" style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;width:min(380px,100%)"><h2 style="margin:0 0 12px">ĐĂNG NHẬP · 로그인</h2><label for="lpw">Mật khẩu · 비밀번호</label><input id="lpw" type="password" autocomplete="current-password"><button class="pri" style="width:100%;margin-top:12px">Vào sổ · 들어가기</button><div id="lmsg" style="margin-top:10px;color:var(--out);font-size:14px"></div></form></div>
+<div id="pdfov" hidden style="position:fixed;inset:0;z-index:9999;background:#2b2f3a;color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px">Đang tạo PDF… · PDF 생성 중…</div>
+<dialog id="dlg">
+ <div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><h2 id="hSet" style="margin:0"></h2><button class="bt" id="dClose"></button></div>
+ <div style="display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 4px"><button class="bt pri" id="bkBtn"><span class="vi">SAO LƯU DỮ LIỆU (.json)</span><span class="ko">데이터 백업 저장</span></button><button class="bt" id="rsBtn"><span class="vi">KHÔI PHỤC TỪ FILE</span><span class="ko">파일에서 복원</span></button><input type="file" id="rsFile" accept=".json,application/json" hidden></div>
+ <h2 id="hCo"></h2>
+ <div class="dg"><div><label id="lcName"></label><input id="cName"></div><div><label id="lcTax"></label><input id="cTax"></div><div class="wf2"><label id="lcAddr"></label><input id="cAddr"></div><div><label id="lcMaker"></label><input id="cMaker"></div><div><label id="lcApp"></label><input id="cApp"></div></div>
+ <h2 id="hFund"></h2><div class="box"><div id="fundsEd"></div></div>
+ <h2 id="hPay"></h2><div class="cnt" id="payHint"></div><div class="box"><div id="payees"></div></div>
+</dialog>
+<script>
+var D={print:['In','인쇄'],view:['Xem','미리보기'],q:['Tìm kiếm','검색'],year:['Năm','연도'],yearAll:['Cả năm','연간'],mPdf:['Tải PDF','PDF 저장'],mXlsx:['Tải Excel','엑셀 저장'],pdfHint:['PDF: chọn "Lưu thành PDF" ở mục máy in','PDF: 프린터에서 "PDF로 저장" 선택'],title:['SỔ THEO DÕI THU CHI','현금 출납부'],unit:['Đơn vị','업체명'],open:['Số dư đầu kỳ','기초 잔액'],date:['Ngày','날짜'],dateOpt:['Ngày (có thể để trống)','날짜 (비워도 됨)'],desc:['Nội dung','내용'],who:['Đối tượng','대상'],cat:['Phân loại chi phí','비용 분류'],type:['Loại','구분'],amt:['Số tiền','금액'],add:['Thêm giao dịch','거래 추가'],no:['STT','번호'],in:['Thu','수입'],out:['Chi','지출'],bal:['Số dư','잔액'],del:['Xóa','삭제'],sum:['Cộng phát sinh','합계'],tin:['Tổng thu','총 수입'],tout:['Tổng chi','총 지출'],close:['Số dư cuối kỳ','기말 잔액'],maker:['Người lập','작성자'],app:['Người duyệt','승인자'],clear:['Xóa hết','전체 삭제'],cur:['Tiền tệ','통화'],confirm:['Xóa toàn bộ giao dịch?','모든 거래를 삭제할까요?'],mon:['Tháng','월'],all:['Tất cả','전체'],custom:['Tùy chọn','직접 선택'],from:['Từ ngày','시작일'],to:['Đến ngày','종료일'],mode:['Kiểu in','인쇄 방식'],mDetail:['Sổ chi tiết','상세 장부'],mDay:['Theo ngày','일자별'],mIn:['Chỉ khoản thu','수입만'],mOut:['Chỉ khoản chi','지출만'],mSum:['Tổng hợp','종합'],dayTotal:['Cộng ngày','일 합계'],nodate:['không ngày','날짜 없음'],cats:['Quản lý phân loại','분류 관리'],addCat:['Thêm phân loại','분류 추가'],catSum:['Tổng hợp theo phân loại chi phí','비용 분류별 합계'],uncat:['(Chưa phân loại)','(미분류)'],diff:['Chênh lệch','차액'],show:['Đang hiển thị','표시 중'],period:['Kỳ','기간'],valid:['Hợp lệ','적격 여부'],acc:['Xử lý kế toán','회계 처리'],vOk:['Hợp lệ','적격'],vNo:['Không hợp lệ','부적격'],aOk:['Có thể','가능'],aNo:['Không thể','불가'],notSet:['Chưa chọn','미선택'],inv:['Hóa đơn GTGT','부가세 세금계산서'],set:['Cài đặt','설정'],po:['Số PO','PO 번호'],poL:['Số PO','PO 번호'],co:['Thông tin công ty','회사 정보'],cName:['Tên công ty','회사명'],cTax:['Mã số thuế','사업자등록번호'],cAddr:['Địa chỉ','주소'],payees:['Danh sách đối tượng thu chi','수입·지출 대상 목록'],cnt:['Số lần','건수'],shut:['Đóng','닫기'],noPayee:['Chưa có đối tượng','등록된 대상 없음'],fund:['Quỹ / Tài khoản','자금 / 계좌'],tr:['Chuyển quỹ','자금 이체'],toFund:['Chuyển đến quỹ','이체 대상'],allFunds:['Tất cả quỹ','전체 자금'],funds:['Phân hệ: tiền mặt và tài khoản công ty','모듈: 현금 및 회사 계좌'],addFund:['Thêm tài khoản','계좌 추가'],accNo:['Số tài khoản','계좌번호'],trDesc:['Chuyển quỹ','자금 이체'],payHint:['Sửa tên ở đây sẽ đổi trong toàn bộ sổ. Chỉ xóa được đối tượng chưa có giao dịch.','여기서 이름을 바꾸면 장부 전체에 반영됩니다. 거래가 없는 대상만 삭제할 수 있습니다.']};
+var ICV='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>',ICP='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="9" rx="2"/><rect x="7" y="14" width="10" height="7" rx="1"/></svg>',ICD='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+var today=new Date().toISOString().slice(0,10);
+var S={cur:'₫',year:new Date().getFullYear(),unit:'',co:{name:'',tax:'',addr:'',maker:'',app:''},open:0,nid:4,from:'',to:'',mon:'all',
+cats:['KTX / 기숙사','HÀ NỘI / 하노이','HẢI PHÒNG / 하이퐁','CÁ NHÂN NGƯỜI HÀN / 한국인 개인','GIÁM ĐỐC / 대표'],
+rows:[{id:1,date:today,desc:'Bán hàng',who:'',cat:'HÀ NỘI / 하노이',type:'in',amt:5000000},
+{id:2,date:today,desc:'Văn phòng phẩm',who:'',cat:'HẢI PHÒNG / 하이퐁',type:'out',amt:350000},
+{id:3,date:today,desc:'Tiền điện',who:'',cat:'KTX / 기숙사',type:'out',amt:1200000}]};
+function fundOf(id){return S.funds.filter(function(f){return f.id==id})[0]}
+function fundName(id){var f=fundOf(id);return f?f.vi+(f.no?' · '+f.no:'')+' / '+(f.ko||f.vi):''}
+function fundH(id){var f=fundOf(id);return f?'<span class="vi" style="font-size:12px;color:var(--acc)">'+esc(f.vi)+'</span><span class="ko" style="color:var(--acc)">'+esc(f.ko||'')+'</span>':''}
+function openOf(){if(S.fund=='bank')return 0;return S.fund=='all'?S.funds.reduce(function(a,f){return a+(+f.open||0)},0):(+(fundOf(S.fund)||{}).open||0)}
+function edSel(r,f){var o,v=r[f]||'';if(f=='cat')o=[['','—']].concat(S.cats.map(function(c){return[c,cp(c)]}));else if(f=='valid')o=[['','—'],['ok',tp('vOk')],['no',tp('vNo')]];else if(f=='acc')o=[['','—'],['ok',tp('aOk')],['no',tp('aNo')]];else o=[['','—'],['Không có hóa đơn','Không có HĐ · 계산서 없음'],['Có hóa đơn','Có HĐ · 계산서 있음']].concat(v&&v!='Không có hóa đơn'&&v!='Có hóa đơn'?[[v,v]]:[]);
+ return '<select data-e="'+r.id+':'+f+'" style="min-height:34px;padding:4px 6px;font-size:13px">'+o.map(function(x){return '<option value="'+esc(x[0])+'"'+(x[0]==v?' selected':'')+'>'+esc(x[1])+'</option>'}).join('')+'</select>'}
+function amtOf(x){if(x==null||x==='')return 0;if(typeof x=='number')return Math.abs(Math.round(x));var t=String(x).replace(/\s/g,'').replace(/[^\d.,-]/g,'');if(!t)return 0;if(/[.,]\d{1,2}$/.test(t)&&/[.,].*[.,]/.test(t))t=t.slice(0,-3);else if(/^\d{1,3}([.,]\d{3})*([.,]\d{1,2})?$/.test(t)&&/[.,]\d{1,2}$/.test(t)&&!/[.,]\d{3}$/.test(t))t=t.replace(/[.,]\d{1,2}$/,'');return Math.abs(+t.replace(/[.,-]/g,''))||0}
+function dateOf(x){if(typeof x=='number'&&x>20000&&x<80000){var d=new Date(Math.round((x-25569)*864e5));return d.toISOString().slice(0,10)}if(x instanceof Date)return iso2(x);var m=/(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})/.exec(String(x||''));if(m){var y=+m[3];if(y<100)y+=2000;return pd(('0'+m[1]).slice(-2)+'/'+('0'+m[2]).slice(-2)+'/'+y)}m=/(\d{4})[\/\-.](\d{1,2})[\/\-.](\d{1,2})/.exec(String(x||''));return m?m[1]+'-'+('0'+m[2]).slice(-2)+'-'+('0'+m[3]).slice(-2):''}
+function iso2(d){return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)}
+var KW={date:/^(ng[aà]y( giao d[iị]ch)?|date|trans.*date|posting date|ng[aà]y gd)$/i,desc:/(ghi ch[uú]|di[eễ]n gi[aả]i|n[oộ]i dung|m[oô] t[aả]|description|remark|details?|chi ti[eế]t|narrative)/i,typ:/(lo[aạ]i giao d[iị]ch|transaction type)/i,dr:/(ghi n[oợ]|debit|s[oố] ti[eề]n r[uú]t|withdraw|ti[eề]n ra|ph[aá]t sinh n[oợ])/i,cr:/(ghi c[oó]|credit|s[oố] ti[eề]n g[uử]i|deposit|ti[eề]n v[aà]o|ph[aá]t sinh c[oó])/i,bal:/(s[oố] d[uư]|balance)/i,amt:/(s[oố] ti[eề]n|amount)/i,ref:/(tham chi[eế]u|s[oố] (ct|ch[uứ]ng t[uừ])|^ref|m[aã] gd)/i};
+function colOf(x){x=String(x).normalize('NFC').trim();var ks=['date','typ','dr','cr','bal','ref','desc','amt'];for(var i=0;i<ks.length;i++)if(KW[ks[i]].test(x))return ks[i];return ''}
+function cleanNote(n,ref){n=String(n||'').replace(/\s+/g,' ').trim();if(ref)n=n.split(ref).join(' ');n=n.replace(/\/\s*\d{6,}\s*\//g,' ').replace(/(\s*\/\s*)+$/,'').replace(/^(\s*\/\s*)+/,'').replace(/\s*\/\s*\/\s*/g,' / ').replace(/\s+/g,' ').trim();return n.replace(/^\/|\/$/g,'').trim()}
+function mkRow(d,note,typ,dr,cr,ref,bal){var ds=cleanNote(note,ref);if(/^[\d\s\/\-.:]*$/.test(ds))ds='';if(!ds){ds=(/chuy[eể]n ti[eề]n|transfer/i.test(typ||'')&&(dr||cr)<100000)?'Phí chuyển tiền':(typ||'')}if(ref&&ds=='Phí chuyển tiền')ds+=' – '+ref;return{date:d,desc:ds,type:cr?'in':'out',amt:cr||dr,po:ref||'',bal:bal||0}}
+function parseGrid(rows){var hi=-1,c={};for(var i=0;i<Math.min(rows.length,40);i++){var cc={};rows[i].forEach(function(x,j){var k=colOf(x==null?'':x);if(k&&cc[k]==null)cc[k]=j});if(cc.date!=null&&(cc.desc!=null||cc.typ!=null)&&(cc.dr!=null||cc.cr!=null||cc.amt!=null)){hi=i;c=cc;break}}
+ if(hi<0)return null;var out=[];for(var k=hi+1;k<rows.length;k++){var r=rows[k];var d=dateOf(r[c.date]);if(!d)continue;
+  var dr=c.dr!=null?amtOf(r[c.dr]):0,cr=c.cr!=null?amtOf(r[c.cr]):0;if(!dr&&!cr&&c.amt!=null){var av=r[c.amt],n=amtOf(av);if(String(av).trim().charAt(0)=='-'||(typeof av=='number'&&av<0))dr=n;else cr=n}
+  if(!dr&&!cr)continue;var ref=c.ref!=null?String(r[c.ref]==null?'':r[c.ref]).trim():'';out.push(mkRow(d,c.desc!=null?r[c.desc]:'',c.typ!=null?String(r[c.typ]||''):'',dr,cr,ref,c.bal!=null?amtOf(r[c.bal]):0))}return out}
+function readXlsx(buf){var wb=XLSX.read(buf,{type:'array',cellDates:false});for(var i=0;i<wb.SheetNames.length;i++){var g=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[i]],{header:1,raw:true,defval:''});var r=parseGrid(g);if(r&&r.length)return r}return null}
+function readPdf(buf){if(!window.pdfjsLib)return Promise.reject(new Error('pdf'));if(!pdfjsLib.GlobalWorkerOptions.workerSrc)pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+ return pdfjsLib.getDocument({data:buf}).promise.then(function(doc){var ps=[];for(var p=1;p<=doc.numPages;p++)ps.push(doc.getPage(p).then(function(pg){return pg.getTextContent()}));return Promise.all(ps)}).then(function(pages){var H=null,out=[];
+  pages.forEach(function(tc){var items=tc.items.filter(function(it){return it.str&&it.str.trim()}).map(function(it){return{x:it.transform[4]+(it.width||0)/2,x0:it.transform[4],y:it.transform[5],s:it.str.normalize('NFC').trim()}});
+   var hh={};items.forEach(function(q){var k=colOf(q.s);if(k&&hh[k]==null)hh[k]=q});if(hh.date&&(hh.dr||hh.cr)){H={};for(var k in hh)H[k]=hh[k].x;H.y=hh.date.y}if(!H)return;
+   var top=hh.date?hh.date.y:1e9;var recs=items.filter(function(q){return q.y<top-2&&/^\d{1,2}[\/\-.]\d{1,2}[\/\-.]\d{4}$/.test(q.s)&&Math.abs(q.x-H.date)<60}).map(function(q){return{y:q.y,d:dateOf(q.s),c:{}}});if(!recs.length)return;
+   var gap=recs.length>1?Math.abs(recs[0].y-recs[1].y):30;
+   items.forEach(function(q){if(q.y>=top-2)return;var best=null,bd=1e9;recs.forEach(function(r){var dd=Math.abs(r.y-q.y);if(dd<bd){bd=dd;best=r}});if(!best||bd>gap*1.2)return;
+    var ck='',cd=1e9;for(var k in H){if(k=='y')continue;var dx=Math.abs(H[k]-q.x);if(k=='desc'&&q.x0>=H.desc-80)dx=Math.min(dx,0.5);if(dx<cd){cd=dx;ck=k}}
+    (best.c[ck]=best.c[ck]||[]).push(q)});
+   recs.forEach(function(r){var tx=function(k){return(r.c[k]||[]).sort(function(a,b){return b.y-a.y||a.x0-b.x0}).map(function(q){return q.s}).join(' ')};var dr=amtOf(tx('dr')),cr=amtOf(tx('cr'));if(!dr&&!cr)return;out.push(mkRow(r.d,tx('desc'),tx('typ'),dr,cr,tx('ref').trim(),amtOf(tx('bal'))))})});return out})}
+function importFiles(files){var msg=$('impMsg');msg.textContent='Đang đọc… · 읽는 중…';var add=0,dup=0,bad=[];
+ var key=function(r){return [r.date,r.type,r.amt,r.bal?'b'+r.bal:(r.po||'')+nrm(r.desc).slice(0,30)].join('|')},have={};S.rows.forEach(function(r){if(r.fund=='bank'){var k=key(r);have[k]=(have[k]||0)+1}});
+ return [].slice.call(files).reduce(function(p,f){return p.then(function(){return f.arrayBuffer()}).then(function(buf){return /\.pdf$/i.test(f.name)?readPdf(buf):readXlsx(new Uint8Array(buf))}).then(function(rows){if(!rows||!rows.length){bad.push(f.name);return}
+   rows.forEach(function(r){var k=key(r);if(have[k]){have[k]--;dup++;return}var mm=/\bcho\b\s+(.+)$/i.exec(nrm(r.desc)),who0='';if(mm){who0=r.desc.slice(r.desc.length-mm[1].length).split('/')[0].replace(/[,;:\s]+$/,'').trim();if(who0&&S.whos.indexOf(who0)<0)S.whos.push(who0)}S.rows.push({bal:r.bal||0,id:S.nid++,date:r.date,desc:r.desc,descKo:'',who:who0,cat:'',po:r.po,inv:'',type:r.type,valid:'',acc:'',amt:r.amt,fund:'bank',src:'saoke'});add++})}).catch(function(){bad.push(f.name)})},Promise.resolve()).then(function(){
+   msg.innerHTML='+'+add+' dòng · '+add+'건'+(dup?' · trùng '+dup:'')+(bad.length?' · <span class="out">Không đọc được: '+esc(bad.join(', '))+'</span>':'');render();saveNow();fillKo()})}
+function norm(){var c0=S.co||{};S.co=Object.assign({name:'',tax:'',addr:'',maker:'',app:''},c0);if(!S.co.name)S.co.name=S.unit||'';
+S.q='';S.last=0;if(/^\d{4}-\d{2}$/.test(S.mon)){S.year=+S.mon.slice(0,4);S.mon=S.mon.slice(5)}
+S.wk=S.wk||{};S.whos=S.whos||[];S.cats=S.cats||[];S.rows=S.rows||[];S.rows.forEach(function(r){if(r.who&&S.whos.indexOf(r.who)<0)S.whos.push(r.who)});var F0=Array.isArray(S.funds)?S.funds:[],fc=F0.filter(function(f){return f.id=='cash'})[0],fb=F0.filter(function(f){return f.id=='bank'})[0]||F0.filter(function(f){return f.id!='cash'})[0];S.funds=[Object.assign({vi:'Tiền mặt',ko:'현금',no:'',open:+S.open||0},fc||{},{id:'cash'}),Object.assign({vi:'Tài khoản công ty',ko:'회사 계좌',no:'',open:0},fb||{},{id:'bank'})];if(S.fund!='bank')S.fund='cash';S.rows.forEach(function(r){r.fund=r.fund=='cash'||!r.fund?'cash':'bank'});var cyN=new Date().getFullYear();if(!S.year||S.year>cyN)S.year=cyN;S.nid=Math.max(S.nid||1,S.rows.reduce(function(m,r){return Math.max(m,r.id||0)},0)+1)}
+norm();
+/* ---- lưu trên máy chủ Netlify ---- */
+var CL={ready:false,t:0,busy:false,again:false,last:'',key:''};
+try{CL.key=localStorage.getItem('sothuchi_key')||''}catch(e){}
+function snap(){var o=Object.assign({},S);delete o.q;delete o.last;return JSON.stringify(o)}
+function stat(m,c){var e=$('cstat');if(e){e.textContent=m;e.style.color=c||'var(--mute)'}}
+function api(m,body){return fetch('/api/sothuchi',{method:m,headers:{'content-type':'application/json','x-app-key':CL.key},body:body}).then(function(r){if(r.status==503){var e2=new Error('nopw');e2.code='nopw';throw e2}if(r.status==401){var e=new Error('auth');e.code='auth';throw e}if(!r.ok)throw new Error('http '+r.status);return r.json()})}
+function push(){if(!CL.ready)return;var d=snap();if(CL.local){try{localStorage.setItem('sothuchi',d)}catch(e){}CL.last=d;stat('Đã lưu trên máy này (bản xem thử) · 이 기기에 저장됨','var(--in)');return}if(d==CL.last){stat('Đã lưu lên máy chủ · 서버에 저장됨','var(--in)');return}
+ if(CL.busy){CL.again=true;return}CL.busy=true;stat('Đang lưu… · 저장 중…');
+ api('PUT',d).then(function(){CL.last=d;stat('Đã lưu lên máy chủ · 서버에 저장됨','var(--in)')}).catch(function(e){if(e.code=='auth')return lock();stat('Chưa lưu được – kiểm tra mạng, sẽ thử lại · 저장 실패, 재시도','var(--out)');setTimeout(push,5000)}).then(function(){CL.busy=false;if(CL.again){CL.again=false;push()}})}
+var UN={st:[],re:[],cur:null,busy:false};
+function track(){if(!CL.ready||UN.busy)return;var d=snap();if(UN.cur!==null&&d!==UN.cur){UN.st.push(UN.cur);if(UN.st.length>60)UN.st.shift();UN.re=[]}UN.cur=d}
+function undoRedo(redo){var a=redo?UN.re:UN.st,b=redo?UN.st:UN.re;if(!a.length){stat(redo?'Không còn thao tác để làm lại · 다시 실행할 항목 없음':'Không còn thao tác để hoàn tác · 실행 취소할 항목 없음');return}b.push(UN.cur);var d=a.pop(),keep={q:S.q,from:S.from,to:S.to,mon:S.mon,year:S.year,fund:S.fund};UN.busy=true;S=Object.assign({},JSON.parse(d),keep);norm();S.q=keep.q;UN.cur=d;fillInputs();render();UN.busy=false;stat(redo?'Đã làm lại · 다시 실행':'Đã hoàn tác · 실행 취소','var(--acc)');save()}
+function save(){track();if(!CL.ready)return;clearTimeout(CL.t);CL.t=setTimeout(push,800)}
+function saveNow(){clearTimeout(CL.t);push()}
+function pull(first){return api('GET').then(function(r){if(r&&r.data){var keep={q:S.q,from:S.from,to:S.to,mon:S.mon,year:S.year};S=Object.assign(S,r.data);if(!first)Object.assign(S,keep);norm();if(!first)S.q=keep.q;CL.last=snap()}else{S.rows=[];S.nid=1;CL.last=''}CL.ready=true;UN.st=[];UN.re=[];UN.cur=null;fillInputs();render();if(first)fillKo();if(!r||!r.data)saveNow()})}
+function fillInputs(){[['cName','name'],['cTax','tax'],['cAddr','addr'],['cMaker','maker'],['cApp','app']].forEach(function(x){$(x[0]).value=S.co[x[1]]||''});$('pFrom').value=dm(S.from);$('pTo').value=dm(S.to)}
+function lock(){CL.ready=false;$('login').hidden=false;$('lpw').focus()}
+function login(pw){pw=String(pw||'').trim();CL.key=pw;$('lmsg').textContent='Đang kết nối… · 연결 중…';pull(true).then(function(){try{localStorage.setItem('sothuchi_key',pw)}catch(e){}$('login').hidden=true;$('lmsg').textContent=''}).catch(function(e){$('lmsg').textContent=e.code=='auth'?'Sai mật khẩu · 비밀번호 오류':e.code=='nopw'?'Netlify chưa nạp biến APP_PASSWORD – kiểm tra tên biến rồi Deploy lại':'Không kết nối được máy chủ · 서버 연결 실패'})}
+function dm(i){return /^\d{4}-\d{2}-\d{2}$/.test(i||'')?i.slice(8)+'/'+i.slice(5,7)+'/'+i.slice(0,4):''}
+function pd(x){var m=/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec((x||'').trim());if(!m)return'';var d=+m[1],o=+m[2],y=+m[3],z=new Date(y,o-1,d);return z.getFullYear()==y&&z.getMonth()==o-1&&z.getDate()==d?y+'-'+('0'+o).slice(-2)+'-'+('0'+d).slice(-2):''}
+function mask(e){var v=e.target.value.replace(/\D/g,'').slice(0,8),o=v;if(v.length>4)o=v.slice(0,2)+'/'+v.slice(2,4)+'/'+v.slice(4);else if(v.length>2)o=v.slice(0,2)+'/'+v.slice(2);e.target.value=o}
+function vb(x){return x=='ok'?'<div class="in">'+stk('Hợp lệ','적격')+'</div>':x=='no'?'<div class="out">'+stk('Không hợp lệ','부적격')+'</div>':''}
+function ab(x){return x=='ok'?'<div class="in">'+stk('Có thể','가능')+'</div>':x=='no'?'<div class="out">'+stk('Không thể','불가')+'</div>':''}
+function ib(x){return x?(x=='Không có hóa đơn'?'<div class="out">'+stk('Không có hóa đơn','세금계산서 없음')+'</div>':esc(x)):''}
+function stk(a,b){return '<span class="vi">'+a+'</span><span class="ko">'+b+'</span>'}
+function t(k){var a=D[k];return stk(a[0],a[1])}
+function tp(k){var a=D[k];return a[0]+' · '+a[1]}
+function tx(k,s){var a=D[k];return stk(a[0]+' '+s[0],a[1]+' '+s[1])}
+function bi(c){var p=String(c||'').split(' / ');return '<span class="vi">'+esc(p[0])+'</span>'+(p[1]?'<span class="ko">'+esc(p.slice(1).join(' / '))+'</span>':'')}
+function cp(c){return String(c).replace(' / ',' · ')}
+function stack(k){return t(k)}
+function fmt(n){return Math.round(n).toLocaleString('vi-VN')}
+function fmtc(n){return fmt(n)+' '+S.cur}
+function num(x){return +String(x).replace(/\D/g,'')||0}
+function money(e){var d=e.target.value.replace(/\D/g,'');e.target.value=d?(+d).toLocaleString('vi-VN'):''}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function $(i){return document.getElementById(i)}
+function R(c,cl,id){return '<div class="r '+(cl||'')+'"><span>'+c[0]+'</span><span>'+c[1]+'</span><span>'+(c[12]||'')+'</span><span>'+c[2]+'</span><span>'+c[3]+'</span><span>'+c[4]+'</span><span>'+(c[9]||'')+'</span><span>'+(c[10]||'')+'</span><span>'+(c[11]||'')+'</span><span class="n in">'+c[5]+'</span><span class="n out">'+c[6]+'</span><span class="n'+(c[8]?' out':'')+'">'+c[7]+'</span><span class="x">'+(id?'<button aria-label="'+tp('del')+'" data-d="'+id+'">×</button>':'')+'</span></div>'}
+var TR={t:0,p:null,dirty:false};
+var KO_DICT=[['von gop sang tk thanh toan','출자금을 결제 계좌로 이체'],['chuyen khoan von vao tai khoan thanh toan','자본금을 결제 계좌로 이체'],['ck von gop','출자금 이체'],['tien luong va tien ho tro an o di lai ban dau','급여 및 초기 식비·주거·교통 지원금'],['tien luong va tien ho tro an o di lai','급여 및 식비·주거·교통 지원금'],['ho tro an o di lai','식비·주거·교통 지원금'],['phi chuyen tien','이체 수수료'],['sms fee','SMS 알림 수수료'],['giao dich phi','거래 수수료'],['phi giao dich','거래 수수료'],['phi quan ly tai khoan','계좌 관리 수수료'],['nop ho le phi nha nuoc','정부 수수료 대납'],['tien thue nha','임대료'],['thue nha','임대료'],['thue van phong','사무실 임대료'],['thue xe','차량 임대료'],['tien may tinh','컴퓨터 대금'],['tien cong chung','공증 비용'],['luong thang','월 급여'],['tien luong','급여'],['luong','급여'],['thuong','상여금'],['tam ung','선급금'],['hoan ung','선급금 정산'],['sua van phong','사무실 수리'],['sua vp','사무실 수리'],['van phong pham','사무용품'],['le phi nha nuoc','정부 수수료'],['le phi','수수료'],['xin visa','비자 신청'],['lam visa','비자 발급'],['visa','비자'],['giay phep lao dong','노동허가서'],['the tam tru','임시거주증'],['lao dong','근로자'],['cong chung','공증'],['dich thuat','번역'],['may tinh','컴퓨터'],['thiet bi','장비'],['von gop','출자금'],['nop tien mat','현금 입금'],['nop tien','현금 입금'],['rut tien','출금'],['tien dien','전기료'],['tien nuoc','수도료'],['internet','인터넷 요금'],['dien thoai','전화 요금'],['bao hiem xa hoi','사회보험'],['bao hiem','보험'],['thue gtgt','부가가치세'],['thue tncn','개인소득세'],['thue tndn','법인세'],['nop thue','세금 납부'],['xang dau','유류비'],['xang','유류비'],['an trua','점심 식대'],['tiep khach','접대비'],['cong tac phi','출장비'],['ve may bay','항공권'],['khach san','호텔'],['van chuyen','운송비'],['tien hang','물품 대금'],['ban hang','매출'],['hoan tien','환불'],['lai tien gui','예금 이자'],['tien lai','이자'],['ky tuc xa','기숙사'],['ktx','기숙사'],['hoa don','세금계산서'],['dat coc','계약금'],['coc','보증금'],['hai phong','하이퐁'],['ha noi','하노이']];
+var KO_VERB=[['mua','구매'],['tt','지급'],['thanh toan','지급'],['tra','지급'],['nop','납부'],['chuyen khoan','이체'],['ck','이체']];
+function koName(t){t=String(t||'').split('/')[0].replace(/[,;:\s]+$/,'').trim();var n=nrm(t).replace(/[^a-z0-9]+/g,' ').trim();for(var i=0;i<KO_DICT.length;i++)if(n==KO_DICT[i][0])return KO_DICT[i][1];
+ var m=/^(cong ty tnhh|cong ty cp|cong ty|cty tnhh|cty)\s+(.+)$/i.exec(n);if(m)return t.split(/\s+/).slice(m[1].split(' ').length).join(' ')+' '+(/tnhh/.test(m[1])?'유한회사':'회사');m=/^cn\s+(.+)$/i.exec(n);if(m)return t.split(/\s+/).slice(1).join(' ')+' 지점';return t}
+function ruleKo(t){var o=String(t||'').trim();if(!o)return '';var N=function(x){return ' '+nrm(x).replace(/[^a-z0-9]+/g,' ').trim()+' '},n=N(o),parts=[],tgt='',verb='';
+ var m=/\bcho\b\s+(.+)$/i.exec(nrm(o));if(m){var cut=o.length-m[1].length;tgt=koName(o.slice(cut));n=N(o.slice(0,cut-4))}
+ KO_DICT.forEach(function(p){var k=' '+p[0]+' ';if(n.indexOf(k)>=0){if(parts.indexOf(p[1])<0&&!parts.some(function(x){return x.indexOf(p[1])>=0}))parts.push(p[1]);n=n.split(k).join(' ')}});
+ if(!parts.length)return '';KO_VERB.forEach(function(v){if(!verb&&n.indexOf(' '+v[0]+' ')>=0)verb=v[1]});if(/이체|입금|납부|대납|수수료$/.test(parts[parts.length-1]))verb='';
+ return parts.join(', ')+(verb?' '+verb:'')+(tgt?' – '+tgt:'')}
+var TC={};function trans(q){q=String(q||'').trim().slice(0,480);if(!q)return Promise.resolve('');var rk=ruleKo(q);if(rk)return Promise.resolve(rk);if(TC[q])return Promise.resolve(TC[q]);
+ var srv=CL&&CL.server?fetch('/api/translate?q='+encodeURIComponent(q),{headers:{'x-app-key':CL.key}}).then(function(r){return r.json()}).then(function(j){return {responseData:{translatedText:j&&j.text||''}}}):fetch('https://api.mymemory.translated.net/get?q='+encodeURIComponent(q)+'&langpair=vi|ko').then(function(r){return r.json()});
+ return srv.then(function(j){var x=(j&&j.responseData&&j.responseData.translatedText)||'',ta=document.createElement('textarea');ta.innerHTML=x;var o=ta.value.replace(/<[^>]*>/g,'').replace(/\s+/g,' ').trim();return /QUERY LENGTH|MYMEMORY WARNING|INVALID/i.test(o)?'':(TC[q]=o)}).catch(function(){return ''})}
+function trRun(){var v=$('fDesc').value.trim();if(!v){$('fDescKo').value='';TR.dirty=false;return}if(TR.dirty)return;
+ TR.p=trans(v).then(function(k){if($('fDesc').value.trim()==v&&!TR.dirty){$('fDescKo').value=k;if(!k)$('fDescKo').placeholder='Không dịch được · 번역 실패 (internet)'}}).then(function(){TR.p=null})}
+function whH(w){if(!w)return '';var k=S.wk[w];return '<span class="vi">'+esc(w)+'</span>'+(k?'<span class="ko">'+esc(k)+'</span>':'')}
+function trWho(){var v=$('fWho').value.trim(),k=$('fWhoKo');if(!v){k.value='';TR.wd=false;return}if(TR.wd)return;if(S.wk[v]){k.value=S.wk[v];return}TR.wp=trans(v).then(function(x){if($('fWho').value.trim()==v&&!TR.wd)k.value=x}).then(function(){TR.wp=null})}
+function fillKo(){var q=[],seen={},cl=function(s){return String(s||'').replace(/<[^>]*>/g,'').replace(/\s+/g,' ').trim()};S.rows.forEach(function(r){if(r.descKo)r.descKo=cl(r.descKo)});for(var kk in S.wk)S.wk[kk]=cl(S.wk[kk]);S.rows.forEach(function(r){if(r.desc&&!r.descKo)q.push(function(){return trans(r.desc).then(function(k){if(k)r.descKo=k})});if(r.who&&!S.wk[r.who]&&!seen[r.who]){seen[r.who]=1;q.push(function(){return trans(r.who).then(function(k){if(k)S.wk[r.who]=k})})}});if(!q.length)return;q.reduce(function(p,f){return p.then(f)},Promise.resolve()).then(function(){render()})}
+function dlPdf(){var ov=$('pdfov'),pc=$('pcss'),de=document.documentElement,th=de.getAttribute('data-theme'),w=document.querySelector('.wrap'),ws=w.style.cssText;
+ if(!window.html2canvas||!window.jspdf){alert('Không tải được thư viện PDF (cần internet) · PDF 라이브러리를 불러올 수 없습니다');return}
+ ov.hidden=false;buildPrint();pc.media='all';de.setAttribute('data-theme','light');w.style.width='1123px';w.style.maxWidth='1123px';
+ var done=function(){pc.media='print';if(th==null)de.removeAttribute('data-theme');else de.setAttribute('data-theme',th);w.style.cssText=ws;ov.hidden=true};
+ (document.fonts&&document.fonts.ready||Promise.resolve()).then(function(){return new Promise(function(r){setTimeout(r,200)})}).then(function(){
+  var W=1123,PH=794,wr=w.getBoundingClientRect(),H=Math.ceil(w.scrollHeight),sc=Math.min(2,Math.sqrt(16e6/(W*H)),16000/H);
+  var tp0=function(e){return Math.round(e.getBoundingClientRect().top-wr.top)};
+  var cuts=[].map.call(document.querySelectorAll('#pv .r,#pv h2,.sig'),tp0).filter(function(y){return y>0}).sort(function(a,b){return a-b});
+  var hd=document.querySelector('#pv .r.h'),hh=0,hy=0;if(hd&&$('pMode').value!='sum'){hh=Math.ceil(hd.getBoundingClientRect().height);hy=tp0(hd)}
+  return html2canvas(w,{scale:sc,windowWidth:W,backgroundColor:'#fff'}).then(function(cv){
+   var pdf=new window.jspdf.jsPDF({orientation:'landscape',unit:'mm',format:'a4'}),y=0,p=0;
+   while(y<H-1){var e=y+PH-(p?hh:0);if(e<H){var b=cuts.filter(function(c){return c>y+20&&c<=e}).pop();e=b||e}else e=H;
+    var pg=document.createElement('canvas');pg.width=Math.round(W*sc);pg.height=Math.round(PH*sc);var g=pg.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,pg.width,pg.height);
+    var oy=0;if(p&&hh){g.drawImage(cv,0,hy*sc,cv.width,hh*sc,0,0,cv.width,hh*sc);oy=hh}
+    g.drawImage(cv,0,y*sc,cv.width,(e-y)*sc,0,oy*sc,cv.width,(e-y)*sc);
+    if(p)pdf.addPage();pdf.addImage(pg.toDataURL('image/jpeg',.92),'JPEG',0,0,297,210);y=e;p++}
+   pdf.save((S.fund=='bank'?'so-tien-gui-':'so-quy-tien-mat-')+today+'.pdf')})}).catch(function(e){alert('PDF: '+e)}).then(done)}
+function dsc(r){return '<span class="vi">'+esc(r.desc)+'</span>'+(r.descKo?'<span class="ko">'+esc(r.descKo)+'</span>':'')}
+function nrm(x){return String(x||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/Đ/g,'d').toLowerCase()}
+function qm(r){if(!S.q)return true;return nrm([r.desc,r.descKo,r.who,S.wk[r.who],r.po,r.inv,r.cat].join(' ')).indexOf(nrm(S.q))>=0}
+function view(){var f=S.from,e=S.to,rg=f||e,op=openOf(),rows=[];
+ S.rows.forEach(function(r){var a=+r.amt||0;if(S.fund!='all'&&(r.fund||'cash')!=S.fund)return;
+  if(rg){if(!r.date)return;if(f&&r.date<f){op+=r.type=='in'?a:-a;return}if(e&&r.date>e)return}
+  if(!qm(r))return;rows.push(r)});
+ var ti=0,tt=0;rows.forEach(function(r){var a=+r.amt||0;if(r.type=='in')ti+=a;else tt+=a});
+ return{rows:rows,op:op,ti:ti,tt:tt,rg:rg}}
+function head(){return R([t('no'),t('date'),t('desc'),t('who'),t('cat'),t('in'),t('out'),t('bal'),0,t('valid'),t('acc'),t('inv'),t('po')],'h')}
+function body(v,m,del){var h=head(),bal=v.op,cd=null,di=0,dO=0;
+ if(m=='in'||m=='out'){var tot=0;
+  v.rows.filter(function(r){return r.type==m}).forEach(function(r,i){var a=+r.amt||0;tot+=a;
+   h+=R([i+1,esc(dm(r.date)),dsc(r),whH(r.who),bi(r.cat),m=='in'?fmt(a):'',m=='out'?fmt(a):'','',0,vb(r.valid),ab(r.acc),ib(r.inv),esc(r.po)])});
+  return h+R(['','',t('sum'),'','',m=='in'?fmt(tot):'',m=='out'?fmt(tot):'',''],'s')}
+ var rows=v.rows.slice();
+ if(m=='day')rows.sort(function(a,b){return(a.date||'')<(b.date||'')?-1:(a.date||'')>(b.date||'')?1:0});
+ if(S.fund!='bank')h+=R(['','',t('open'),'','','','',fmt(bal),bal<0],'o');
+ rows.forEach(function(r,i){var a=+r.amt||0,d=r.date||'';
+  if(m=='day'&&cd!==null&&d!=cd){h+=R(['','',tx('dayTotal',cd?[esc(dm(cd)),esc(dm(cd))]:D.nodate),'','',fmt(di),fmt(dO),(S.q||S.fund=='bank'?'':fmt(bal)),bal<0&&!S.q&&S.fund!='bank'],'s');di=0;dO=0}
+  cd=d;if(r.type=='in'){bal+=a;di+=a}else{bal-=a;dO+=a}
+  var BK=S.fund=='bank',ED=BK&&del;h+=R([i+1,esc(dm(d)),dsc(r),del?'<input data-w="'+r.id+'" list="whoList" value="'+esc(r.who||'')+'" placeholder="—" style="min-height:34px;padding:4px 6px;font-size:13px">'+(r.who&&S.wk[r.who]?'<span class="ko">'+esc(S.wk[r.who])+'</span>':''):whH(r.who),ED?edSel(r,'cat'):bi(r.cat),r.type=='in'?fmt(a):'',r.type=='out'?fmt(a):'',(S.q||BK?'':fmt(bal)),bal<0&&!S.q&&!BK,ED?edSel(r,'valid'):vb(r.valid),ED?edSel(r,'acc'):ab(r.acc),ED?edSel(r,'inv'):ib(r.inv),esc(r.po)],(del&&r.id==S.last?'new':''),del?r.id:0)});
+ if(m=='day'&&cd!==null)h+=R(['','',tx('dayTotal',cd?[esc(dm(cd)),esc(dm(cd))]:D.nodate),'','',fmt(di),fmt(dO),(S.q?'':fmt(bal)),bal<0&&!S.q],'s');
+ return h+R(['','',t('sum'),'','',fmt(v.ti),fmt(v.tt),(S.q||S.fund=='bank'?'':fmt(bal)),bal<0&&!S.q&&S.fund!='bank'],'s')}
+function catHtml(v){var m={},ord=S.cats.slice();
+ v.rows.forEach(function(r){var k=r.cat||'';if(!m[k]){m[k]={i:0,o:0};if(k&&ord.indexOf(k)<0)ord.push(k)}var a=+r.amt||0;if(r.type=='in')m[k].i+=a;else m[k].o+=a});
+ if(m['']&&ord.indexOf('')<0)ord.push('');
+ var h='<div class="r c4 h"><span>'+t('cat')+'</span><span class="n">'+t('in')+'</span><span class="n">'+t('out')+'</span><span class="n">'+t('diff')+'</span></div>';
+ ord.forEach(function(k){var x=m[k];if(!x)return;var d=x.i-x.o;
+  h+='<div class="r c4"><span>'+(k?bi(k):t('uncat'))+'</span><span class="n in">'+(x.i?fmt(x.i):'')+'</span><span class="n out">'+(x.o?fmt(x.o):'')+'</span><span class="n'+(d<0?' out':'')+'">'+fmt(d)+'</span></div>'});
+ h+='<div class="r c4 s"><span>'+t('sum')+'</span><span class="n in">'+fmt(v.ti)+'</span><span class="n out">'+fmt(v.tt)+'</span><span class="n">'+fmt(v.ti-v.tt)+'</span></div>';
+ return '<div class="box">'+h+'</div>'}
+function sumHtml(v){var a=dm(S.from)||'…',b=dm(S.to)||'…';
+ var p=v.rg?stk(D.from[0]+' '+a+' '+D.to[0].toLowerCase()+' '+b,D.from[1]+' '+a+' ~ '+D.to[1]+' '+b):t('all');
+ return '<div style="margin:12px 0 4px;font-weight:600">'+p+'</div><div class="kp"><div>'+t('tin')+'<b class="in">'+fmtc(v.ti)+'</b></div><div>'+t('tout')+'<b class="out">'+fmtc(v.tt)+'</b></div></div>'+catHtml(v)}
+function monLabel(m){var y=m.slice(0,4),n=+m.slice(5);return 'Tháng '+n+'/'+y+' · '+y+'년 '+n+'월'}
+function renderCo(){var c=S.co;
+ $('co').innerHTML=(c.name?'<div style="font-size:20px;font-weight:700;color:var(--ink)">'+esc(c.name)+'</div>':'')+(c.tax?'<div>'+tp('cTax')+': '+esc(c.tax)+'</div>':'')+(c.addr?'<div>'+tp('cAddr')+': '+esc(c.addr)+'</div>':'');
+ if(c.maker)$('sMaker').innerHTML+='<div style="margin-top:56px;font-weight:600">'+esc(c.maker)+'</div>';
+ if(c.app)$('sApp').innerHTML+='<div style="margin-top:56px;font-weight:600">'+esc(c.app)+'</div>'}
+function renderSet(){var st={};S.whos.forEach(function(w){st[w]={n:0,i:0,o:0}});
+ S.rows.forEach(function(r){var w=r.who;if(!w||!st[w])return;st[w].n++;var a=+r.amt||0;if(r.type=='in')st[w].i+=a;else st[w].o+=a});
+ var h='<div class="r pr h"><span>'+t('who')+'</span><span>한국어</span><span class="n">'+t('cnt')+'</span><span class="n">'+t('in')+'</span><span class="n">'+t('out')+'</span><span></span></div>';
+ S.whos.forEach(function(w,i){var x=st[w];h+='<div class="r pr"><input data-p="'+i+'" value="'+esc(w)+'" aria-label="'+tp('who')+'"><input data-k="'+i+'" value="'+esc(S.wk[w]||'')+'" placeholder="한국어"><span class="n">'+x.n+'</span><span class="n in">'+(x.i?fmt(x.i):'')+'</span><span class="n out">'+(x.o?fmt(x.o):'')+'</span><span>'+(x.n?'':'<button data-q="'+i+'" aria-label="'+tp('del')+'" style="min-width:44px;padding:0;border:0;background:transparent;color:var(--out);font-size:20px">×</button>')+'</span></div>'});
+ $('payees').innerHTML=S.whos.length?h:'<div style="padding:12px">'+t('noPayee')+'</div>'}
+function render(){
+ var set={title:'title',lOpen:'open',lDate:'date',lPo:'poL',lDesc:'desc',lWho:'who',lCat:'cat',lValid:'valid',lInv:'inv',setBtn:'set',lQ:'q',lYear:'year',miPrint:'print',miPdf:'mPdf',miXlsx:'mXlsx',hSet:'set',hCo:'co',hPay:'payees',lcName:'cName',lcTax:'cTax',lcAddr:'cAddr',lcMaker:'maker',lcApp:'app',dClose:'shut',payHint:'payHint',lAcc:'acc',lType:'type',lAmt:'amt',add:'add',addCat:'addCat',lMon:'mon',lFrom:'from',lTo:'to',lMode:'mode',sMaker:'maker',sApp:'app'};
+ for(var id in set)$(id).innerHTML=t(set[id]);renderCo();renderSet();
+ (function(){var M2={cash:['SỔ QUỸ TIỀN MẶT','현금 출납부'],bank:['SỔ TIỀN GỬI NGÂN HÀNG','예금 출납부']}[S.fund],fb=fundOf('bank');
+ $('mod').innerHTML='<option value="cash">TIỀN MẶT · 현금</option><option value="bank">TÀI KHOẢN CÔNG TY · 회사 계좌'+(fb.no?' · '+esc(fb.no):'')+'</option>';$('mod').value=S.fund;
+ $('title').innerHTML=stk(M2[0],M2[1]);if(S.fund=='bank'&&(fb.no||fb.vi!='Tài khoản công ty'))$('co').innerHTML+='<div>'+tp('accNo')+': '+esc(fb.no)+(fb.vi!='Tài khoản công ty'?' – '+esc(fb.vi):'')+'</div>';
+ $('hFund').innerHTML=t('funds');$('imp').hidden=S.fund!='bank';$('imp').style.display=S.fund=='bank'?'flex':'none';$('topOpen').hidden=S.fund=='bank';$('lOpen').innerHTML=t('open');var op=$('open');op.disabled=false;if(document.activeElement!==op)op.value=openOf()?fmt(openOf()):'';
+ var h='<div class="r pr h"><span>'+t('fund')+'</span><span>한국어</span><span>'+t('accNo')+'</span><span class="n">'+t('open')+'</span><span class="n">'+t('cnt')+'</span><span></span></div>';
+ S.funds.forEach(function(f,i){var n=S.rows.filter(function(r){return r.fund==f.id}).length;h+='<div class="r pr"><input data-fv="'+i+'" value="'+esc(f.vi)+'"><input data-fk="'+i+'" value="'+esc(f.ko||'')+'" placeholder="한국어"><input data-fn="'+i+'" value="'+esc(f.no||'')+'"'+(f.id=='cash'?' disabled':'')+'><input data-fo="'+i+'" class="n" value="'+(f.open?fmt(f.open):'')+'"><span class="n">'+n+'</span><span></span></div>'});
+ $('fundsEd').innerHTML=h})();
+ $('cur').innerHTML='<span>'+D.cur[0]+': '+S.cur+'</span><small>'+D.cur[1]+': '+S.cur+'</small>';$('viewBtn').innerHTML=ICV;$('prBtn').innerHTML=ICP+'<span>'+t('print')+'</span>'+ICD;$('clear').innerHTML=stack('clear');
+ 
+ var o=$('fType').options;o[0].textContent=tp('in');o[1].textContent=tp('out');
+ var fv=$('fValid').options,fa=$('fAcc').options;fv[0].textContent=fa[0].textContent='—';fv[1].textContent=tp('vOk');fv[2].textContent=tp('vNo');fa[1].textContent=tp('aOk');fa[2].textContent=tp('aNo');
+ var pm=$('pMode').options,mk=['mDetail','mDay','mIn','mOut','mSum'];for(var q=0;q<5;q++)pm[q].textContent=tp(mk[q]);
+ var cv=$('fCat').value;$('fCat').innerHTML='<option value="">—</option>'+S.cats.map(function(c){return '<option value="'+esc(c)+'">'+esc(cp(c))+'</option>'}).join('');$('fCat').value=cv;
+ $('whoList').innerHTML=S.whos.map(function(x){return '<option value="'+esc(x)+'">'}).join('');
+ $('chips').innerHTML=S.cats.map(function(c,i){return '<span class="chip">'+esc(cp(c))+'<button aria-label="'+tp('del')+'" data-c="'+i+'">×</button></span>'}).join('');
+ var cy=+today.slice(0,4),ys={};for(var yy=2020;yy<=cy;yy++)ys[yy]=1;S.rows.forEach(function(r){if(r.date)ys[+r.date.slice(0,4)]=1});ys[S.year]=1;
+ $('pYear').innerHTML=Object.keys(ys).sort().reverse().map(function(y){return '<option>'+y+'</option>'}).join('');$('pYear').value=S.year;
+ var mo='<option value="all">'+tp('all')+'</option><option value="year">'+tp('yearAll')+'</option>';for(var q2=1;q2<=12;q2++)mo+='<option value="'+('0'+q2).slice(-2)+'">Tháng '+q2+' · '+q2+'월</option>';mo+='<option value="custom">'+tp('custom')+'</option>';
+ var sel=$('pMon');sel.innerHTML=mo;sel.value=S.mon;if(sel.value!=S.mon){S.mon='custom';sel.value='custom'}
+ var qs={};S.whos.forEach(function(x){qs[x]=1});S.cats.forEach(function(c){qs[c.split(' / ')[0]]=1});S.rows.forEach(function(r){[r.po,r.inv,r.desc].forEach(function(x){if(x)qs[x]=1})});
+ $('qList').innerHTML=Object.keys(qs).slice(0,300).map(function(x){return '<option value="'+esc(x)+'">'}).join('');
+ var v=view();
+ $('cnt').textContent=tp('show')+' '+v.rows.length+'/'+S.rows.filter(function(r){return r.fund==S.fund}).length;
+ var fa=document.activeElement,fk=fa&&fa.closest&&fa.closest('#tbl')&&(fa.dataset.w?['data-w',fa.dataset.w]:fa.dataset.e?['data-e',fa.dataset.e]:null),fsel=fk&&fa.selectionStart;$('tbl').innerHTML=body(v,'detail',true);if(fk){var nf=document.querySelector('#tbl ['+fk[0]+'="'+fk[1]+'"]');if(nf){nf.focus();try{if(fsel!=null)nf.setSelectionRange(fsel,fsel)}catch(x){}}}
+ $('cat').innerHTML=sumHtml(v);$('sumTitle').innerHTML=t('catSum');
+ var fl=function(i){return D.close[i]+' = '+D.open[i]+' + '+D.tin[i]+' − '+D.tout[i]};$('formula').innerHTML=S.fund=='bank'?'<span class="vi">'+D.tin[0]+': <strong class="in">'+fmtc(v.ti)+'</strong> · '+D.tout[0]+': <strong class="out">'+fmtc(v.tt)+'</strong> · '+D.diff[0]+': <strong>'+fmtc(v.ti-v.tt)+'</strong></span><span class="ko">'+D.tin[1]+' · '+D.tout[1]+' · '+D.diff[1]+'</span>':'<span class="vi">'+fl(0)+' = <strong>'+fmtc(v.op+v.ti-v.tt)+'</strong></span><span class="ko">'+fl(1)+'</span>';
+ save();
+}
+function fitPrint(v,m){var pv=$('pv'),rows=v.rows.filter(function(r){return m=='in'||m=='out'?r.type==m:true}),hd={},chk={3:'po',5:'who',6:'cat',7:'valid',8:'acc',9:'inv'};
+ Object.keys(chk).forEach(function(i){if(m=='sum'||!rows.some(function(r){return r[chk[i]]}))hd[i]=1});
+ if(m=='sum'){hd[1]=1;hd[2]=1}if(m=='in'){hd[11]=1;hd[12]=1}if(m=='out'){hd[10]=1;hd[12]=1}
+ var BW=[28,72,74,0,90,110,62,70,86,84,84,92],vis=[];for(var i=1;i<=12;i++)if(!hd[i])vis.push(i);
+ var n=vis.length,pf=n>=11?12.5:n==10?13.5:n==9?14.5:n==8?15.5:16.5,sc=pf/13;
+ pv.className=Object.keys(hd).map(function(i){return 'hc'+i}).join(' ');
+ pv.style.setProperty('--cols',vis.map(function(i){return BW[i-1]?Math.round(BW[i-1]*sc)+'px':'minmax(120px,1fr)'}).join(' '));
+ pv.style.setProperty('--pf',pf+'px');var w=Math.round(150*sc)+'px ';pv.style.setProperty('--c4','minmax(0,1fr) '+w+w+w)}
+function buildPrint(){var v=view(),m=$('pMode').value,h='';
+ var ml={detail:'mDetail',day:'mDay',in:'mIn',out:'mOut',sum:'mSum'}[m];
+ var sub='<div class="sub">'+tp(ml)+' · '+S.cur+(v.rg?' · '+(dm(S.from)||'…')+' → '+(dm(S.to)||'…'):'')+'</div>';
+ if(m=='sum'){var BKs=S.fund=='bank';h='<div class="box">'+(BKs?'':R(['','',t('open'),'','','','',fmt(v.op)],'o'))+R(['','',t('tin'),'','',fmt(v.ti),'',''])+R(['','',t('tout'),'','','',fmt(v.tt),''])+(BKs?R(['','',t('diff'),'','','','',fmt(v.ti-v.tt)],'s'):R(['','',t('close'),'','','','',fmt(v.op+v.ti-v.tt)],'s'))+'</div><h2>'+t('catSum')+'</h2>'+catHtml(v)}
+ else{h='<div class="box">'+body(v,m,false)+'</div>'}
+ $('pv').innerHTML=sub+h;fitPrint(v,m)}
+function csvCell(x){x=String(x==null?'':x);return /[;"\n]/.test(x)?'"'+x.replace(/"/g,'""')+'"':x}
+function dlData(kind){var v=view(),m=$('pMode').value,L=[],A=[],H=function(k){return D[k][0]+' / '+D[k][1]},row=function(a){A.push(a);L.push(a.map(csvCell).join(';'))};
+ if(m=='sum'){var mp={},ord=S.cats.slice();v.rows.forEach(function(r){var k=r.cat||'';if(!mp[k]){mp[k]={i:0,o:0};if(k&&ord.indexOf(k)<0)ord.push(k)}var a=+r.amt||0;if(r.type=='in')mp[k].i+=a;else mp[k].o+=a});
+  if(mp['']&&ord.indexOf('')<0)ord.push('');row([H('cat'),H('in'),H('out'),H('diff')]);
+  ord.forEach(function(k){var x=mp[k];if(x)row([k||D.uncat[0],x.i,x.o,x.i-x.o])});row([H('sum'),v.ti,v.tt,v.ti-v.tt])}
+ else{var rs=v.rows.slice();if(m=='in'||m=='out')rs=rs.filter(function(r){return r.type==m});
+  if(m=='day')rs.sort(function(a,b){return(a.date||'')<(b.date||'')?-1:(a.date||'')>(b.date||'')?1:0});
+  row([H('no'),H('date'),H('fund'),H('po'),H('desc'),'내용 (한국어)',H('who'),H('cat'),H('valid'),H('acc'),H('inv'),H('in'),H('out')]);
+  rs.forEach(function(r,i){var a=+r.amt||0;row([i+1,dm(r.date),fundName(r.fund),r.po||'',r.desc,r.descKo||'',(r.who||'')+(S.wk[r.who]?' / '+S.wk[r.who]:''),r.cat||'',r.valid=='ok'?D.vOk[0]:r.valid=='no'?D.vNo[0]:'',r.acc=='ok'?D.aOk[0]:r.acc=='no'?D.aNo[0]:'',r.inv||'',r.type=='in'?a:'',r.type=='out'?a:''])})}
+ if(kind=='xlsx'&&window.XLSX){var ws=XLSX.utils.aoa_to_sheet(A);ws['!cols']=A[0].map(function(){return{wch:18}});var wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'So thu chi');XLSX.writeFile(wb,(S.fund=='bank'?'so-tien-gui-':'so-quy-tien-mat-')+today+'.xlsx');return}
+ var b=new Blob(['\ufeffsep=;\r\n'+L.join('\r\n')],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');
+ a.href=URL.createObjectURL(b);a.download=(S.fund=='bank'?'so-tien-gui-':'so-quy-tien-mat-')+today+'.csv';document.body.appendChild(a);a.click();a.remove()}
+function doSearch(){var nf=pd($('pFrom').value),nt=pd($('pTo').value);if(nf!=S.from||nt!=S.to){S.from=nf;S.to=nt;S.mon=(nf||nt)?'custom':'all'}S.q=$('pQ').value.trim();render();$('cnt').scrollIntoView({behavior:'smooth',block:'start'})}
+function rangeFor(){var y=S.year,m=S.mon;if(m=='year'){S.from=y+'-01-01';S.to=y+'-12-31'}else if(/^\d\d$/.test(m)){S.from=y+'-'+m+'-01';S.to=y+'-'+m+'-'+('0'+new Date(y,+m,0).getDate()).slice(-2)}else if(m=='all'){S.from='';S.to=''}}
+function setMonth(m){S.mon=m;rangeFor();$('pFrom').value=dm(S.from);$('pTo').value=dm(S.to);render()}
+function setRange(){S.from=pd($('pFrom').value);S.to=pd($('pTo').value);S.mon=(S.from||S.to)?'custom':'all';render()}
+['fDate','pFrom','pTo'].forEach(function(i){$(i).addEventListener('input',mask)});
+var ORD2=['pYear','pMon','pFrom','pTo','pMode','pQ'];
+ORD2.forEach(function(id,k){$(id).addEventListener('keydown',function(e){if(e.key!='Enter'||e.ctrlKey||e.metaKey)return;e.preventDefault();if(k==ORD2.length-1){doSearch();$('prBtn').focus({preventScroll:true});return}if(id=='pFrom'||id=='pTo')setRange();$(ORD2[k+1]).focus()})});
+$('fCat').addEventListener('keydown',function(e){if(e.key=='+'){e.preventDefault();$('catPanel').hidden=false;$('newVi').focus()}});
+$('newVi').addEventListener('keydown',function(e){if(e.key=='Enter'){e.preventDefault();$('newKo').focus()}});
+$('newKo').addEventListener('keydown',function(e){if(e.key=='Enter'){e.preventDefault();$('addCat').click()}});
+var ORD=['fDate','fPo','fDesc','fWho','fCat','fValid','fAcc','fInv','fType','fAmt'];
+ORD.forEach(function(id,k){$(id).addEventListener('keydown',function(e){if(e.key=='Enter'&&!e.ctrlKey&&!e.metaKey){e.preventDefault();if(k==ORD.length-1)$('add').click();else $(ORD[k+1]).focus()}})});
+document.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&e.key=='Enter'){e.preventDefault();$('add').click()}});
+$('add').title='Ctrl+Enter';
+$('setBtn').onclick=function(){renderSet();$('dlg').showModal()};
+$('dClose').onclick=function(){$('dlg').close()};
+$('dlg').addEventListener('click',function(e){if(e.target==this)this.close()});
+[['cName','name'],['cTax','tax'],['cAddr','addr'],['cMaker','maker'],['cApp','app']].forEach(function(x){$(x[0]).value=S.co[x[1]]||'';$(x[0]).oninput=function(e){S.co[x[1]]=e.target.value;render()}});
+$('payees').onchange=function(e){var kk=e.target.dataset&&e.target.dataset.k;if(kk!=null&&kk!==''){S.wk[S.whos[+kk]]=e.target.value.trim();render();return}var i=e.target.dataset&&e.target.dataset.p;if(i==null||i==='')return;i=+i;var nw=e.target.value.trim(),old=S.whos[i];if(!nw||nw==old){render();return}S.rows.forEach(function(r){if(r.who==old)r.who=nw});if(S.wk[old]&&!S.wk[nw])S.wk[nw]=S.wk[old];delete S.wk[old];var k=S.whos.indexOf(nw);if(k>=0&&k!=i)S.whos.splice(i,1);else S.whos[i]=nw;render()};
+$('payees').onclick=function(e){var q=e.target.dataset&&e.target.dataset.q;if(q!=null&&q!==''){S.whos.splice(+q,1);render()}};
+$('fAmt').addEventListener('input',money);
+$('imp').onclick=function(e){if(e.target.id!='impFile')$('impFile').click()};
+$('impFile').onchange=function(e){if(e.target.files.length)importFiles(e.target.files);e.target.value=''};
+['dragover','dragenter'].forEach(function(n){$('imp').addEventListener(n,function(e){e.preventDefault();this.style.background='var(--sum)'})});
+$('imp').addEventListener('dragleave',function(){this.style.background='var(--card)'});
+$('imp').addEventListener('drop',function(e){e.preventDefault();this.style.background='var(--card)';if(e.dataTransfer.files.length)importFiles(e.dataTransfer.files)});
+$('tbl').addEventListener('keydown',function(e){if(e.key!='Enter'||!e.target.dataset||!(e.target.dataset.w||e.target.dataset.e))return;e.preventDefault();var attr=e.target.dataset.w?'data-w':'data-e',sel=e.target.dataset.e?'[data-e$=":'+e.target.dataset.e.split(':')[1]+'"]':'[data-w]',all=[].slice.call(document.querySelectorAll('#tbl '+sel)),i=all.indexOf(e.target),nx=all[i+1];var id=nx&&nx.getAttribute(attr);e.target.blur();setTimeout(function(){var n=id&&document.querySelector('#tbl ['+attr+'="'+id+'"]');if(n){n.focus();if(n.select)n.select()}},30)});
+$('tbl').addEventListener('change',function(e){var w=e.target.dataset&&e.target.dataset.w;if(w){var rr=S.rows.filter(function(x){return x.id==w})[0];if(rr){var v=e.target.value.trim();rr.who=v;if(v&&S.whos.indexOf(v)<0)S.whos.push(v);render();fillKo()}return}var k=e.target.dataset&&e.target.dataset.e;if(!k)return;var p=k.split(':'),r=S.rows.filter(function(x){return x.id==p[0]})[0];if(r){r[p[1]]=e.target.value;render()}});
+$('mod').onchange=function(e){S.fund=e.target.value;S.q='';$('pQ').value='';render();window.scrollTo(0,0)};
+$('fundsEd').onchange=function(e){var d=e.target.dataset,i;if((i=d.fv)!=null){S.funds[+i].vi=e.target.value.trim()||S.funds[+i].vi}else if((i=d.fk)!=null){S.funds[+i].ko=e.target.value.trim()}else if((i=d.fn)!=null){S.funds[+i].no=e.target.value.trim()}else if((i=d.fo)!=null){S.funds[+i].open=num(e.target.value);if(S.funds[+i].id=='cash')S.open=S.funds[+i].open}else return;render()};
+
+document.querySelectorAll('.cal[data-f]').forEach(function(b){var tx=$(b.dataset.f),pk=$(b.dataset.f+'P');
+ b.onclick=function(){pk.value=pd(tx.value)||'';try{pk.showPicker()}catch(e){pk.focus();pk.click()}};
+ pk.onchange=function(){tx.value=dm(pk.value);tx.dispatchEvent(new Event('change'))}});
+$('catPlus').onclick=function(){var q=$('catPanel');q.hidden=!q.hidden};
+$('pYear').onchange=function(e){S.year=+e.target.value;rangeFor();$('pFrom').value=dm(S.from);$('pTo').value=dm(S.to);render()};
+$('pMon').onchange=function(e){setMonth(e.target.value)};
+$('pFrom').onchange=setRange;$('pTo').onchange=setRange;
+$('cur').onclick=function(){S.cur=S.cur=='₫'?'₩':'₫';render()};
+window.onbeforeprint=buildPrint;
+var PL=$('prList');
+$('prBtn').onclick=function(e){e.stopPropagation();PL.hidden=!PL.hidden;var f=PL.querySelector('button');if(!PL.hidden&&f)f.focus()};
+PL.addEventListener('keydown',function(e){var b=[].slice.call(PL.querySelectorAll('button')),i=b.indexOf(document.activeElement);if(e.key=='ArrowDown'){e.preventDefault();b[(i+1)%b.length].focus()}else if(e.key=='ArrowUp'){e.preventDefault();b[(i+b.length-1)%b.length].focus()}else if(e.key=='Escape'){PL.hidden=true;$('prBtn').focus()}});
+document.addEventListener('click',function(){PL.hidden=true});
+PL.onclick=function(e){var a=e.target.closest('button');if(!a)return;PL.hidden=true;if(a.dataset.a=='xlsx')dlData('xlsx');else if(a.dataset.a=='pdf')dlPdf();else{buildPrint();window.print()}};
+$('viewBtn').onclick=doSearch;
+
+$('clear').onclick=function(){if(confirm(tp('confirm')+' ('+(fundOf(S.fund)||{}).vi+')')){S.rows=S.rows.filter(function(r){return r.fund!=S.fund});render()}};
+$('open').oninput=function(e){money(e);var f=fundOf(S.fund);if(f){f.open=num(e.target.value);if(f.id=='cash')S.open=f.open}render()};
+$('add').onclick=function(){var a=num($('fAmt').value);if(!(a>0)){$('fAmt').focus();return}
+ var wh=$('fWho').value.trim();if(wh&&S.whos.indexOf(wh)<0)S.whos.push(wh);if(wh&&$('fWhoKo').value.trim())S.wk[wh]=$('fWhoKo').value.trim();
+ var base={date:pd($('fDate').value),desc:$('fDesc').value,descKo:$('fDescKo').value.trim(),who:$('fWho').value.trim(),cat:$('fCat').value,po:$('fPo').value.trim(),inv:$('fInv').value.trim(),valid:$('fValid').value,acc:$('fAcc').value,amt:a,fund:S.fund};
+ S.rows.push(Object.assign({},base,{id:S.nid++,type:$('fType').value}));
+ $('fDesc').value='';$('fDescKo').value='';TR.dirty=false;$('fWho').value='';$('fWhoKo').value='';TR.wd=false;$('fValid').value='';$('fAcc').value='';$('fInv').value='';$('fPo').value='';$('fAmt').value='';S.last=S.nid-1;render();var nr=document.querySelector('#tbl .r.new');if(nr)nr.scrollIntoView({behavior:'smooth',block:'nearest'});$('fPo').focus({preventScroll:true});setTimeout(function(){S.last=0},1800);fillKo()};
+var addNow=$('add').onclick;
+$('add').onclick=function(){if(TR.t){clearTimeout(TR.t);TR.t=0;trRun()}if(TR.wt){clearTimeout(TR.wt);TR.wt=0;trWho()}var ps=[TR.p,TR.wp].filter(Boolean);if(ps.length){Promise.all(ps).then(addNow);return}addNow()};
+$('fDesc').addEventListener('input',function(){clearTimeout(TR.t);TR.t=setTimeout(function(){TR.t=0;trRun()},300)});
+$('fWho').addEventListener('input',function(){clearTimeout(TR.wt);TR.wt=setTimeout(function(){TR.wt=0;trWho()},300)});
+$('fWhoKo').addEventListener('input',function(){TR.wd=!!this.value});
+$('fDescKo').addEventListener('input',function(){TR.dirty=!!this.value});
+function addCat2(a,b){var c=b?a+' / '+b:a;if(S.cats.indexOf(c)<0){S.cats.push(c);$('newVi').value='';$('newKo').value='';render()}$('fCat').value=c;$('catPanel').hidden=true;$('fCat').focus()}
+$('addCat').onclick=function(){var a=$('newVi').value.trim(),b=$('newKo').value.trim();if(!a)return;if(b)addCat2(a,b);else trans(a).then(function(k){addCat2(a,k)})};
+$('chips').onclick=function(e){var i=e.target.dataset&&e.target.dataset.c;if(i!=null&&i!==''){S.cats.splice(+i,1);render()}};
+$('tbl').onclick=function(e){var d=e.target.dataset&&e.target.dataset.d;if(d){S.rows=S.rows.filter(function(r){return r.id!=d});render()}};
+$('fDate').value=dm(today);$('pFrom').value=dm(S.from);$('pTo').value=dm(S.to);
+$('bkBtn').onclick=function(){var b=new Blob([JSON.stringify({app:'sothuchi',v:1,data:S})],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='so-thu-chi-saoluu-'+today+'.json';document.body.appendChild(a);a.click();a.remove()};
+$('rsBtn').onclick=function(){$('rsFile').click()};
+$('rsFile').onchange=function(e){var f=e.target.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){var d;try{d=JSON.parse(rd.result)}catch(x){d=null}
+ if(!d||d.app!='sothuchi'||!d.data||!Array.isArray(d.data.rows)){alert('File không phải bản sao lưu của sổ · 이 장부의 백업 파일이 아닙니다');return}
+ if(!confirm('Ghi đè toàn bộ dữ liệu hiện tại bằng file này? · 현재 데이터를 모두 덮어쓸까요?'))return;
+ S=Object.assign(S,d.data);S.co=Object.assign({name:'',tax:'',addr:'',maker:'',app:''},S.co||{});S.whos=S.whos||[];S.wk=S.wk||{};S.cats=S.cats||[];S.q='';S.last=0;S.nid=S.rows.reduce(function(m,r){return Math.max(m,r.id||0)},0)+1;
+ [['cName','name'],['cTax','tax'],['cAddr','addr'],['cMaker','maker'],['cApp','app']].forEach(function(x){$(x[0]).value=S.co[x[1]]||''});
+ $('pFrom').value=dm(S.from);$('pTo').value=dm(S.to);
+ render();saveNow();fillKo();alert('Đã khôi phục · 복원했습니다')};rd.readAsText(f);e.target.value=''};
+document.addEventListener('keydown',function(e){if(!(e.ctrlKey||e.metaKey))return;var k=(e.key||'').toLowerCase();if(k=='s'){e.preventDefault();saveNow();return}
+ var ae=document.activeElement,txt=ae&&(ae.tagName=='TEXTAREA'||ae.tagName=='INPUT'&&/^(text|search|password|)$/.test(ae.type||'')&&!ae.readOnly)&&ae.value;
+ if(k=='z'&&!e.shiftKey&&!txt){e.preventDefault();undoRedo(false)}else if((k=='y'||k=='z'&&e.shiftKey)&&!txt){e.preventDefault();undoRedo(true)}});
+window.addEventListener('focus',function(){if(CL.ready&&!CL.busy&&snap()==CL.last)pull(false).catch(function(){})});
+window.addEventListener('beforeunload',function(e){if(CL.ready&&snap()!=CL.last){saveNow();e.preventDefault();e.returnValue=''}});
+$('lform').onsubmit=function(e){e.preventDefault();login($('lpw').value)};
+$('logout').onclick=function(){try{localStorage.removeItem('sothuchi_key')}catch(e){}location.reload()};
+function localMode(){CL.local=true;try{var sv=localStorage.getItem('sothuchi');if(sv)S=Object.assign(S,JSON.parse(sv))}catch(e){}norm();CL.ready=true;$('logout').hidden=true;fillInputs();render();fillKo()}
+fetch('/api/sothuchi').then(function(r){if(r.status==503){CL.server=true;lock();$('lmsg').textContent='Netlify chưa nạp biến APP_PASSWORD – kiểm tra tên biến rồi Deploy lại';return}if(r.status==401){CL.server=true;if(CL.key)login(CL.key);else lock()}else localMode()}).catch(function(){localMode()});
+</script>
+</body>
+</html>
