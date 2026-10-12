@@ -166,6 +166,7 @@ function readPdf(buf){if(!window.pdfjsLib)return Promise.reject(new Error('pdf')
 function importFiles(files){var msg=$('impMsg');msg.textContent='Đang đọc… · 읽는 중…';var add=0,dup=0,bad=[];
  var key=function(r){return [r.date,r.type,r.amt,r.bal?'b'+r.bal:(r.po||'')+nrm(r.desc).slice(0,30)].join('|')},have={};S.rows.forEach(function(r){if(r.fund=='bank'){var k=key(r);have[k]=(have[k]||0)+1}});
  return [].slice.call(files).reduce(function(p,f){return p.then(function(){return f.arrayBuffer()}).then(function(buf){return /\.pdf$/i.test(f.name)?readPdf(buf):readXlsx(new Uint8Array(buf))}).then(function(rows){if(!rows||!rows.length){bad.push(f.name);return}
+   if(rows.length>1&&rows[0].date>rows[rows.length-1].date)rows=rows.slice().reverse();
    rows.forEach(function(r){var k=key(r);if(have[k]){have[k]--;dup++;return}var mm=/\bcho\b\s+(.+)$/i.exec(nrm(r.desc)),who0='';if(mm){who0=r.desc.slice(r.desc.length-mm[1].length).split('/')[0].replace(/[,;:\s]+$/,'').trim();if(who0&&S.whos.indexOf(who0)<0)S.whos.push(who0)}S.rows.push({bal:r.bal||0,id:S.nid++,date:r.date,desc:r.desc,descKo:'',who:who0,cat:'',po:r.po,inv:'',type:r.type,valid:'',acc:'',amt:r.amt,fund:'bank',src:'saoke'});add++})}).catch(function(){bad.push(f.name)})},Promise.resolve()).then(function(){
    msg.innerHTML='+'+add+' dòng · '+add+'건'+(dup?' · trùng '+dup:'')+(bad.length?' · <span class="out">Không đọc được: '+esc(bad.join(', '))+'</span>':'');render();saveNow();fillKo()})}
 function norm(){var c0=S.co||{};S.co=Object.assign({name:'',tax:'',addr:'',maker:'',app:''},c0);if(!S.co.name)S.co.name=S.unit||'';
@@ -177,7 +178,7 @@ var CL={ready:false,t:0,busy:false,again:false,last:'',key:''};
 try{CL.key=localStorage.getItem('sothuchi_key')||''}catch(e){}
 function snap(){var o=Object.assign({},S);delete o.q;delete o.last;return JSON.stringify(o)}
 function stat(m,c){var e=$('cstat');if(e){e.textContent=m;e.style.color=c||'var(--mute)'}}
-function api(m,body){return fetch('/api/sothuchi',{method:m,headers:{'content-type':'application/json','x-app-key':CL.key},body:body}).then(function(r){if(r.status==503){var e2=new Error('nopw');e2.code='nopw';throw e2}if(r.status==401){var e=new Error('auth');e.code='auth';throw e}if(!r.ok)throw new Error('http '+r.status);return r.json()})}
+function api(m,body){return fetch('/api/sothuchi',{method:m,headers:{'content-type':'application/json','x-app-key':CL.key},body:body}).then(function(r){if(r.status==401){var e=new Error('auth');e.code='auth';throw e}if(!r.ok)throw new Error('http '+r.status);return r.json()})}
 function push(){if(!CL.ready)return;var d=snap();if(CL.local){try{localStorage.setItem('sothuchi',d)}catch(e){}CL.last=d;stat('Đã lưu trên máy này (bản xem thử) · 이 기기에 저장됨','var(--in)');return}if(d==CL.last){stat('Đã lưu lên máy chủ · 서버에 저장됨','var(--in)');return}
  if(CL.busy){CL.again=true;return}CL.busy=true;stat('Đang lưu… · 저장 중…');
  api('PUT',d).then(function(){CL.last=d;stat('Đã lưu lên máy chủ · 서버에 저장됨','var(--in)')}).catch(function(e){if(e.code=='auth')return lock();stat('Chưa lưu được – kiểm tra mạng, sẽ thử lại · 저장 실패, 재시도','var(--out)');setTimeout(push,5000)}).then(function(){CL.busy=false;if(CL.again){CL.again=false;push()}})}
@@ -189,7 +190,7 @@ function saveNow(){clearTimeout(CL.t);push()}
 function pull(first){return api('GET').then(function(r){if(r&&r.data){var keep={q:S.q,from:S.from,to:S.to,mon:S.mon,year:S.year};S=Object.assign(S,r.data);if(!first)Object.assign(S,keep);norm();if(!first)S.q=keep.q;CL.last=snap()}else{S.rows=[];S.nid=1;CL.last=''}CL.ready=true;UN.st=[];UN.re=[];UN.cur=null;fillInputs();render();if(first)fillKo();if(!r||!r.data)saveNow()})}
 function fillInputs(){[['cName','name'],['cTax','tax'],['cAddr','addr'],['cMaker','maker'],['cApp','app']].forEach(function(x){$(x[0]).value=S.co[x[1]]||''});$('pFrom').value=dm(S.from);$('pTo').value=dm(S.to)}
 function lock(){CL.ready=false;$('login').hidden=false;$('lpw').focus()}
-function login(pw){pw=String(pw||'').trim();CL.key=pw;$('lmsg').textContent='Đang kết nối… · 연결 중…';pull(true).then(function(){try{localStorage.setItem('sothuchi_key',pw)}catch(e){}$('login').hidden=true;$('lmsg').textContent=''}).catch(function(e){$('lmsg').textContent=e.code=='auth'?'Sai mật khẩu · 비밀번호 오류':e.code=='nopw'?'Netlify chưa nạp biến APP_PASSWORD – kiểm tra tên biến rồi Deploy lại':'Không kết nối được máy chủ · 서버 연결 실패'})}
+function login(pw){CL.key=pw;$('lmsg').textContent='Đang kết nối… · 연결 중…';pull(true).then(function(){try{localStorage.setItem('sothuchi_key',pw)}catch(e){}$('login').hidden=true;$('lmsg').textContent=''}).catch(function(e){$('lmsg').textContent=e.code=='auth'?'Sai mật khẩu · 비밀번호 오류':'Không kết nối được máy chủ · 서버 연결 실패'})}
 function dm(i){return /^\d{4}-\d{2}-\d{2}$/.test(i||'')?i.slice(8)+'/'+i.slice(5,7)+'/'+i.slice(0,4):''}
 function pd(x){var m=/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec((x||'').trim());if(!m)return'';var d=+m[1],o=+m[2],y=+m[3],z=new Date(y,o-1,d);return z.getFullYear()==y&&z.getMonth()==o-1&&z.getDate()==d?y+'-'+('0'+o).slice(-2)+'-'+('0'+d).slice(-2):''}
 function mask(e){var v=e.target.value.replace(/\D/g,'').slice(0,8),o=v;if(v.length>4)o=v.slice(0,2)+'/'+v.slice(2,4)+'/'+v.slice(4);else if(v.length>2)o=v.slice(0,2)+'/'+v.slice(2);e.target.value=o}
@@ -252,6 +253,7 @@ function view(){var f=S.from,e=S.to,rg=f||e,op=openOf(),rows=[];
  S.rows.forEach(function(r){var a=+r.amt||0;if(S.fund!='all'&&(r.fund||'cash')!=S.fund)return;
   if(rg){if(!r.date)return;if(f&&r.date<f){op+=r.type=='in'?a:-a;return}if(e&&r.date>e)return}
   if(!qm(r))return;rows.push(r)});
+ rows=rows.map(function(r,i){return[r,i]}).sort(function(a,b){var x=a[0].date||'9999',y=b[0].date||'9999';return x<y?-1:x>y?1:a[1]-b[1]}).map(function(r){return r[0]});
  var ti=0,tt=0;rows.forEach(function(r){var a=+r.amt||0;if(r.type=='in')ti+=a;else tt+=a});
  return{rows:rows,op:op,ti:ti,tt:tt,rg:rg}}
 function head(){return R([t('no'),t('date'),t('desc'),t('who'),t('cat'),t('in'),t('out'),t('bal'),0,t('valid'),t('acc'),t('inv'),t('po')],'h')}
@@ -429,7 +431,7 @@ window.addEventListener('beforeunload',function(e){if(CL.ready&&snap()!=CL.last)
 $('lform').onsubmit=function(e){e.preventDefault();login($('lpw').value)};
 $('logout').onclick=function(){try{localStorage.removeItem('sothuchi_key')}catch(e){}location.reload()};
 function localMode(){CL.local=true;try{var sv=localStorage.getItem('sothuchi');if(sv)S=Object.assign(S,JSON.parse(sv))}catch(e){}norm();CL.ready=true;$('logout').hidden=true;fillInputs();render();fillKo()}
-fetch('/api/sothuchi').then(function(r){if(r.status==503){CL.server=true;lock();$('lmsg').textContent='Netlify chưa nạp biến APP_PASSWORD – kiểm tra tên biến rồi Deploy lại';return}if(r.status==401){CL.server=true;if(CL.key)login(CL.key);else lock()}else localMode()}).catch(function(){localMode()});
+fetch('/api/sothuchi').then(function(r){if(r.status==401){CL.server=true;if(CL.key)login(CL.key);else lock()}else localMode()}).catch(function(){localMode()});
 </script>
 </body>
 </html>

@@ -3,9 +3,8 @@ import { getStore } from "@netlify/blobs";
 const json = (b, s = 200) => new Response(JSON.stringify(b), { status: s, headers: { "content-type": "application/json" } });
 export const config = { path: "/api/sothuchi" };
 export default async (req) => {
-  const pw = ((globalThis.Netlify && Netlify.env && Netlify.env.get("APP_PASSWORD")) || process.env.APP_PASSWORD || "").trim();
-  if (!pw) return json({ error: "no-password" }, 503);
-  if ((req.headers.get("x-app-key") || "").trim() !== pw) return json({ error: "unauthorized" }, 401);
+  const pw = process.env.APP_PASSWORD;
+  if (!pw || req.headers.get("x-app-key") !== pw) return json({ error: "unauthorized" }, 401);
   const store = getStore({ name: "sothuchi", consistency: "strong" });
   if (req.method === "GET") return json({ data: (await store.get("data", { type: "json" })) || null });
   if (req.method === "PUT") {
